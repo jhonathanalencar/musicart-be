@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./dist/server",
     "dev": "tsx watch ./src/server",
-    "build": "tsc"
+    "build": "tsc",
+    "lint:fix": "eslint . --fix --max-warnings=0"
   },
   "keywords": [],
   "author": "",
