@@ -1,4 +1,4 @@
-import { app } from ".";
+import { app } from '.';
 
 const PORT = process.env.PORT || 3333;
 
