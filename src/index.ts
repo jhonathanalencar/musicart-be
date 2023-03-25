@@ -1,10 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
 import axios from 'axios';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 interface AuthorizeResponse {
   access_token: string;
@@ -12,7 +14,7 @@ interface AuthorizeResponse {
   expires_in: number;
 }
 
-app.post('/authorize', async (request, response) => {
+app.get('/auth/authorize', async (request, response) => {
   const client_id = process.env.CLIENT_ID;
   const client_secret = process.env.CLIENT_SECRET;
 
@@ -31,7 +33,7 @@ app.post('/authorize', async (request, response) => {
     }
   );
 
-  return response.status(200).json(data);
+  return response.status(200).json({ access_token: data.access_token });
 });
 
 export { app };
