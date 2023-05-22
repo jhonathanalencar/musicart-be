@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
+import path from 'node:path';
 
 const app = express();
 
@@ -13,6 +14,24 @@ interface AuthorizeResponse {
   token_type: string;
   expires_in: number;
 }
+
+app.use('/', express.static(path.resolve(__dirname, '..', 'public')));
+
+app.get('^/$|/index(.html)?', (request, response) => {
+  response.sendFile(path.resolve(__dirname, 'views', 'index.html'));
+});
+
+app.all('*', (request, response) => {
+  response.status(404);
+
+  if (request.accepts('html')) {
+    response.sendFile(path.resolve(__dirname, 'views', '404.html'));
+  } else if (request.accepts('json')) {
+    response.json({ message: '404 Not Found' });
+  } else {
+    response.type('txt').send('404 Not Found');
+  }
+});
 
 app.get('/auth/authorize', async (request, response) => {
   const client_id = process.env.CLIENT_ID;
