@@ -1,4 +1,4 @@
-# techNotes API
+# Musicart API
 
 ## 🎯 Objetivo
 
