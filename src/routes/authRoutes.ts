@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import axios from 'axios';
 
-const authRoutes = Router()
+const authRoutes = Router();
 
 interface AuthorizeResponse {
   access_token: string;
@@ -13,22 +13,29 @@ authRoutes.get('/authorize', async (request, response) => {
   const client_id = process.env.CLIENT_ID;
   const client_secret = process.env.CLIENT_SECRET;
 
-  const { data } = await axios.post<AuthorizeResponse>(
-    process.env.SPOTIFY_API_AUTHORIZATION_URL,
-    {
-      grant_type: 'client_credentials',
-    },
-    {
-      headers: {
-        Authorization:
-          'Basic ' +
-          Buffer.from(client_id + ':' + client_secret).toString('base64'),
-        'Content-Type': 'application/x-www-form-urlencoded',
+  try {
+    const { data } = await axios.post<AuthorizeResponse>(
+      process.env.SPOTIFY_API_AUTHORIZATION_URL,
+      {
+        grant_type: 'client_credentials',
       },
-    }
-  );
+      {
+        headers: {
+          Authorization:
+            'Basic ' +
+            Buffer.from(client_id + ':' + client_secret).toString('base64'),
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
 
-  return response.status(200).json({ access_token: data.access_token });
+    return response.status(200).json({ access_token: data.access_token });
+  } catch (error) {
+    console.error(error);
+    return response
+      .status(500)
+      .json({ error: 'Something went wrong. Try later.' });
+  }
 });
 
-export { authRoutes }
+export { authRoutes };
