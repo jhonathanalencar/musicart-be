@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const authRoutes = Router();
 
@@ -32,9 +32,16 @@ authRoutes.get('/authorize', async (request, response) => {
     return response.status(200).json({ access_token: data.access_token });
   } catch (error) {
     console.error(error);
-    return response
-      .status(500)
-      .json({ error: 'Something went wrong. Try later.' });
+
+    let statusCode = 500;
+    let message = 'Something went wrong. Try later.';
+
+    if (error instanceof AxiosError) {
+      statusCode = error.response?.status ?? statusCode;
+      message = error.response?.data ?? message;
+    }
+
+    return response.status(statusCode).json({ error: message });
   }
 });
 
