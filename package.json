@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node ./dist/server",
     "dev": "tsx watch ./src/server",
-    "build": "tsc",
-    "lint:fix": "eslint . --fix --max-warnings=0"
+    "build": "tsc && npm run copy:views",
+    "lint:fix": "eslint . --fix --max-warnings=0",
+    "copy:views": "cpy ./src/views/ ./dist/views/ --flat"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "@types/node": "^18.15.5",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
+    "cpy-cli": "^4.2.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
